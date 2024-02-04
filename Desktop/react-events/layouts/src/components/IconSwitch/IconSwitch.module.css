@@ -1,0 +1,10 @@
+span[class] {
+    font-size: 40px;
+    color: #696969;
+    cursor: pointer;
+}
+
+.container {
+    text-align: right;
+    margin-bottom: 50px;
+}

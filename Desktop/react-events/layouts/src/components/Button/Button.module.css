@@ -1,0 +1,10 @@
+.button {
+    font: inherit;
+    color: red;
+    text-transform: uppercase;
+    padding: 10px 25px;
+    border: 1px solid red;
+    border-radius: 20px;
+    background-color: transparent;
+    cursor: pointer;
+}
