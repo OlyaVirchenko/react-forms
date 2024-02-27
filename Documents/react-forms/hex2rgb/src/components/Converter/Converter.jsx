@@ -1,41 +1,49 @@
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
+import hex2Rgb from '../hex2Rgb.js';
+import changeLightness from '../changeLightness.js';
 
-const Converter = () => {
-    const[hex, setHex] = useState("");
-    const[rgb, setRgb] = useState("rgb(255, 255, 255)");
+const ERROR_BG_COLOR = 'rgb(100, 50, 50)';
+const DEFAULT_COLOR = 'rgb(255,255,255)';
+const DEFAULT_COLOR_TEXT = 'rgb(0,0,0)';
 
-    const onChangeHandler = (ev) => {
-        const {value} =  ev.target;
-        setHex(value);
-        let color = "rgb(..., ..., ...)";
+export default function Hex2RGB() {
 
-        if (value.length === 7) {
-            color = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value) ? `rgb(${parseInt(color[1], 16)}, ${parseInt(color[2], 16)}, ${parseInt(color[3], 16)})` 
-            : null || "Error"
-        } else if (value.length > 7) {
-            color = "Error";
+    const [hex, setHex] = useState('#');
+    const [rgb, setRgb] = useState('');
+    const [isError, setIsError] = useState(false);    
+
+    const handleColorHexChange = event => {
+        const { value } = event.target;
+        if (value.length <=7) {
+            !value ? setHex('#') : setHex(value);
+            setRgb('');
+            setIsError(false);
         }
-        setRgb(color);
+        if (value.length === 7) {            
+            const res = hex2Rgb(value);            
+            setRgb(res || ERROR_BG_COLOR);
+            if(!res) setIsError(true);
+        }
     }
 
-    const BackgroundColor = {
-        backgroundColor: rgb !== "Error" ? rgb : "red"
-    }
+    return (        
+        
+        <form className='converter' style={{ background: rgb }}>
+            <input
+                type='text'
+                id='colorHex' name='colorHex'
+                value={hex}                
+                onChange={handleColorHexChange}/>
 
-    return(
-        <div className="background-container" style={BackgroundColor}>
-            <div>
-              <input
-                type="text"
-                onChange={onChangeHandler}
-                value={hex}
-              />
-            </div>
-            <div>
-            <p>{rgb}</p>
-            </div>
-        </div>
+            <input 
+                type='text'
+                className='colorRGB'                            
+                style= { {background: ( rgb ? changeLightness(rgb,10) : DEFAULT_COLOR ), color: ( rgb ? changeLightness(rgb,-50) : DEFAULT_COLOR_TEXT ) }}                              
+                id='colorRGB' name='colorRGB'                
+                value={isError ? 'Ошибка' : rgb}/>
+
+        </form>        
+        
     )
 }
-
-export default Converter;
