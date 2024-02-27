@@ -30,7 +30,13 @@ function App() {
   }
 
   function removeNote(id) {
-    setNote(notes.filter((note) => note.id !== id))
+    // удалить на сервере
+    fetch(`http://localhost:7070/notes/${id}`,{
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json;charset=utf-8'},
+    });
+    // удалить локально
+    // setNote(notes.filter((note) => note.id !== id))
   }
 
   return (
